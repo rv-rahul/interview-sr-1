@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using CustomerOrderApi.Data;
+using CustomerOrderApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,15 +11,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("CustomerOrderDb"));
 
+builder.Services.AddScoped<CustomerService>();
+builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<ProductService>();
+
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
 app.UseAuthorization();
 app.MapControllers();
 
